@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Student {
+  id                  Int      @id @default(autoincrement())
+  student_id          String   @unique
+  name                String
+  class_name          String
+  role                String   @default("STUDENT") // STUDENT or TEACHER
+  username            String   @unique
+  credential_reference String
+  status              String   @default("NOT STARTED") // NOT STARTED, LOGIN STARTED, SUCCESS, FAILED
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  logs                LoginLog[]
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  name          String
+  username      String   @unique
+  password_hash String
+  role          String   @default("TEACHER") // ADMIN or TEACHER
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+}
+
+model LoginLog {
+  id            Int       @id @default(autoincrement())
+  student_id    Int
+  student       Student   @relation(fields: [student_id], references: [id])
+  started_at    DateTime  @default(now())
+  completed_at  DateTime?
+  status        String
+  device        String?
+  error_message String?
+}
