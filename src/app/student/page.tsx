@@ -77,14 +77,13 @@ export default function StudentFlowPage() {
     setMobileCredentials(null);
     
     try {
-      // Desktop and Mobile Flow: Get credentials and show them to the user
+      // Universal: Always show Copy & Paste overlay for all devices (mobile + desktop)
       const res = await getStudentCredentials(Number(selectedStudentId));
       if (!res.success) {
         setError(res.error || 'បរាជ័យក្នុងការទាញយកគណនី។');
         setIsLoggingIn(false);
       } else {
         setMobileCredentials({ username: res.username!, password: res.password! });
-        // Note: we don't set isLoggingIn to false yet, because we show the credentials in the overlay
       }
     } catch (err: any) {
       setError(err.message || 'មានបញ្ហាក្នុងការទាញយកគណនី។');
