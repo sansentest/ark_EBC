@@ -77,32 +77,17 @@ export default function StudentFlowPage() {
     setMobileCredentials(null);
     
     try {
-      if (isMobile) {
-        // Mobile Flow: Get credentials and show them to the user
-        const res = await getStudentCredentials(Number(selectedStudentId));
-        if (!res.success) {
-          setError(res.error || 'បរាជ័យក្នុងការទាញយកគណនី។');
-          setIsLoggingIn(false);
-        } else {
-          setMobileCredentials({ username: res.username!, password: res.password! });
-          // Note: we don't set isLoggingIn to false yet, because we show the credentials in the overlay
-        }
-      } else {
-        // Desktop Flow: Puppeteer Automation
-        const res = await triggerEBCLogin(Number(selectedStudentId));
-        if (!res.success) {
-          setError(res.error || 'មានបញ្ហាក្នុងការចូលប្រើប្រាស់។');
-        } else {
-          setIsSuccess(true);
-          setTimeout(() => {
-            setIsSuccess(false);
-            setSelectedStudentId('');
-          }, 4000);
-        }
+      // Desktop and Mobile Flow: Get credentials and show them to the user
+      const res = await getStudentCredentials(Number(selectedStudentId));
+      if (!res.success) {
+        setError(res.error || 'បរាជ័យក្នុងការទាញយកគណនី។');
         setIsLoggingIn(false);
+      } else {
+        setMobileCredentials({ username: res.username!, password: res.password! });
+        // Note: we don't set isLoggingIn to false yet, because we show the credentials in the overlay
       }
     } catch (err: any) {
-      setError(err.message || 'មានបញ្ហាក្នុងការចូលប្រើប្រាស់។');
+      setError(err.message || 'មានបញ្ហាក្នុងការទាញយកគណនី។');
       setIsLoggingIn(false);
     }
   };
