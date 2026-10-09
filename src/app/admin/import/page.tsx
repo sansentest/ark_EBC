@@ -80,7 +80,12 @@ export default function ImportPage() {
     setResult(res);
     setIsImporting(false);
     if (res.success) {
-      toast.success(`ជោគជ័យ! បានបញ្ចូលទិន្នន័យ ${res.imported} គណនី។`);
+      if (res.skipped && res.skipped > 0) {
+        toast.warning(`បញ្ចូលបាន ${res.imported} នាក់, រំលង ${res.skipped} នាក់ (ដោយសារជាន់ Username ឬអត់មាន Username/Password)`);
+        console.log('Skipped details:', res.skippedDetails);
+      } else {
+        toast.success(`ជោគជ័យ! បានបញ្ចូលទិន្នន័យ ${res.imported} គណនី។`);
+      }
       setDataPreview([]); // Clear preview on success
     } else {
       toast.error(res.error || 'មានបញ្ហាក្នុងការបញ្ចូលទិន្នន័យ!');
