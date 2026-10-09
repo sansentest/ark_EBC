@@ -22,6 +22,9 @@ const kantumruyPro = Kantumruy_Pro({
 export const metadata: Metadata = {
   title: "Student EBC Flow",
   description: "Student EBC Flow",
+  icons: {
+    icon: '/icon.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
