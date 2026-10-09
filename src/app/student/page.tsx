@@ -524,27 +524,12 @@ export default function StudentFlowPage() {
               </div>
 
               {/* Warning Banner */}
-              <div className="bg-amber-50 border border-amber-200/60 rounded-[1rem] p-4 mb-6">
-                <div className="flex items-start gap-2.5">
-                  <span className="text-amber-500 mt-0.5">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                  </span>
-                  <div>
-                    <p className="text-[13px] text-amber-800 font-bold mb-1">
-                      តើត្រូវធ្វើអ្វីបន្តទៀត?
-                    </p>
-                    <p className="text-[12px] text-amber-700/90 font-medium leading-relaxed">
-                      បន្ទាប់ពីចុចប៊ូតុងខាងក្រោម ពេលទៅដល់គេហទំព័រ Moodle សូមចុចប៊ូតុងពណ៌ខៀវឈ្មោះ <span className="font-bold">EBC</span> ដើម្បីចូលវាយ Username និង Password។
-                    </p>
-                  </div>
-                </div>
-              </div>
 
               {/* Main Button */}
               <button
                 onClick={async () => {
                   await copyToClipboard(mobileCredentials.username);
-                  window.open('https://elearning-ar.ebc.edu.kh/login/index.php', '_blank');
+                  window.open('https://sso.ebc.edu.kh/oauth2/authorize?client_id=C16MlpSMMRw9zw9XiKCGce7DSpga&redirect_uri=https%3A%2F%2Felearning-ar.ebc.edu.kh%2Fadmin%2Foauth2callback.php&response_type=code&scope=openid+email+profile&prompt=login&forceAuth=true', '_blank');
                   await markStudentLoginSuccess(Number(selectedStudentId));
                 }}
                 className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-[1rem] font-bold text-[16px] transition-all duration-300 shadow-lg shadow-blue-500/25 flex items-center justify-center gap-3 active:scale-[0.98] mb-6"
