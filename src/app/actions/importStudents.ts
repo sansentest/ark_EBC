@@ -15,49 +15,76 @@ export interface ImportStudentDTO {
 
 export async function importStudentsAction(students: ImportStudentDTO[]) {
   try {
-    // We should process in batches or all at once depending on size
-    const createdCount = { count: 0 };
     const skipped = [];
+    const validStudents = [];
     
+    // 1. Initial Validation
     for (const student of students) {
-      // Basic validation
       if (!student.studentId || !student.username || !student.passwordRaw) {
-        skipped.push({ id: student.studentId, reason: 'Missing required fields' });
-        continue;
+        skipped.push({ id: student.studentId || 'unknown', reason: 'Missing required fields' });
+      } else {
+        validStudents.push(student);
       }
+    }
 
-      // Check for duplicate username or studentId
-      const existing = await prisma.student.findFirst({
-        where: {
-          OR: [
-            { student_id: String(student.studentId) },
-            { username: String(student.username) }
-          ]
-        }
-      });
+    if (validStudents.length === 0) {
+      return { success: true, imported: 0, skipped: skipped.length, skippedDetails: skipped };
+    }
 
-      if (existing) {
-        skipped.push({ id: student.studentId, reason: 'Duplicate Student ID or Username' });
-        continue;
-      }
+    // 2. Fetch all existing duplicates in ONE query
+    const studentIds = validStudents.map(s => String(s.studentId));
+    const usernames = validStudents.map(s => String(s.username));
 
-      // Encrypt password
-      const encryptedPassword = encrypt(String(student.passwordRaw));
+    const existingStudents = await prisma.student.findMany({
+      where: {
+        OR: [
+          { student_id: { in: studentIds } },
+          { username: { in: usernames } }
+        ]
+      },
+      select: { student_id: true, username: true }
+    });
 
-      // Save to database
-      await prisma.student.create({
-        data: {
-          student_id: String(student.studentId),
+    const existingIdSet = new Set(existingStudents.map(s => s.student_id));
+    const existingUsernameSet = new Set(existingStudents.map(s => s.username));
+
+    // 3. Filter out duplicates and prepare for bulk insert
+    const dataToInsert = [];
+    
+    // Track uniqueness within the current batch to prevent duplicate errors in createMany
+    const currentBatchIds = new Set();
+    const currentBatchUsernames = new Set();
+
+    for (const student of validStudents) {
+      const sId = String(student.studentId);
+      const uName = String(student.username);
+
+      if (existingIdSet.has(sId) || existingUsernameSet.has(uName) || currentBatchIds.has(sId) || currentBatchUsernames.has(uName)) {
+        skipped.push({ id: sId, reason: 'Duplicate Student ID or Username' });
+      } else {
+        currentBatchIds.add(sId);
+        currentBatchUsernames.add(uName);
+        
+        dataToInsert.push({
+          student_id: sId,
           name: String(student.name),
           class_name: String(student.className),
           role: String(student.role),
-          username: String(student.username),
-          credential_reference: encryptedPassword,
+          username: uName,
+          credential_reference: encrypt(String(student.passwordRaw)),
           status: 'NOT STARTED'
-        }
+        });
+      }
+    }
+
+    // 4. Bulk Insert in ONE query
+    let importedCount = 0;
+    if (dataToInsert.length > 0) {
+      const result = await prisma.student.createMany({
+        data: dataToInsert,
+        skipDuplicates: true // Extra safety layer
       });
-      
-      createdCount.count++;
+      importedCount = result.count;
     }
 
     revalidatePath('/admin');
@@ -67,7 +94,7 @@ export async function importStudentsAction(students: ImportStudentDTO[]) {
 
     return { 
       success: true, 
-      imported: createdCount.count,
+      imported: importedCount,
       skipped: skipped.length,
       skippedDetails: skipped
     };
