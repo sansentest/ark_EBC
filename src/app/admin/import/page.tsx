@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
-import { UploadCloud, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { UploadCloud, CheckCircle, AlertCircle, Loader2, FileSpreadsheet } from 'lucide-react';
+import { toast } from 'sonner';
 import { importStudentsAction, ImportStudentDTO } from '@/app/actions/importStudents';
 
 export default function ImportPage() {
@@ -71,7 +72,10 @@ export default function ImportPage() {
     setResult(res);
     setIsImporting(false);
     if (res.success) {
+      toast.success(`ជោគជ័យ! បានបញ្ចូលទិន្នន័យ ${res.imported} គណនី។`);
       setDataPreview([]); // Clear preview on success
+    } else {
+      toast.error(res.error || 'មានបញ្ហាក្នុងការបញ្ចូលទិន្នន័យ!');
     }
   };
 
@@ -218,9 +222,14 @@ export default function ImportPage() {
                   </tbody>
                 </table>
               ) : (
-                <div className="flex flex-col items-center justify-center h-full text-slate-500 py-20">
-                  <UploadCloud size={48} className="mb-4 opacity-20" />
-                  <p>No data to preview</p>
+                <div className="flex flex-col items-center justify-center h-full text-slate-500 py-24 px-4 text-center">
+                  <div className="w-24 h-24 mb-6 rounded-full bg-slate-100 dark:bg-slate-800/50 flex items-center justify-center border-4 border-white dark:border-[#11131a] shadow-xl shadow-slate-200/20 dark:shadow-none">
+                    <FileSpreadsheet size={40} className="text-slate-400 dark:text-slate-500" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-300 mb-2">មិនទាន់មានទិន្នន័យនៅឡើយទេ</h3>
+                  <p className="max-w-xs text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                    សូមជ្រើសរើសឯកសារ Excel (.xlsx) ឬ CSV ដើម្បីមើលទិន្នន័យព្រាងមុននឹងបញ្ចូនចូលប្រព័ន្ធ។
+                  </p>
                 </div>
               )}
             </div>

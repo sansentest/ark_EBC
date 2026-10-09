@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Search, MoreVertical, Play, Edit, Trash2, Filter, Loader2, AlertCircle } from 'lucide-react';
+import { Search, MoreVertical, Play, Edit, Trash2, Filter, Loader2, AlertCircle, SearchX } from 'lucide-react';
+import { toast } from 'sonner';
 import { triggerEBCLogin } from '@/app/actions/automationActions';
 
 type Student = {
@@ -46,7 +47,7 @@ export default function StudentTable({ initialStudents }: { initialStudents: Stu
       setDeleteModal({show: false, id: null});
       window.location.reload();
     } else {
-      setErrorAlert({show: true, message: res.error || 'Failed to delete'});
+      toast.error(res.error || 'មានបញ្ហាក្នុងការលុបទិន្នន័យ');
     }
   };
 
@@ -64,7 +65,7 @@ export default function StudentTable({ initialStudents }: { initialStudents: Stu
       setSelectedIds([]);
       window.location.reload();
     } else {
-      setErrorAlert({show: true, message: res.error || 'Failed to delete multiple accounts'});
+      toast.error(res.error || 'មានបញ្ហាក្នុងការលុបទិន្នន័យច្រើន');
     }
   };
 
@@ -78,7 +79,7 @@ export default function StudentTable({ initialStudents }: { initialStudents: Stu
       setEditModal({show: false, student: null});
       window.location.reload();
     } else {
-      setErrorAlert({show: true, message: res.error || 'Failed to update'});
+      toast.error(res.error || 'មានបញ្ហាក្នុងការកែប្រែទិន្នន័យ');
     }
   };
 
@@ -90,14 +91,15 @@ export default function StudentTable({ initialStudents }: { initialStudents: Stu
       const serverHost = window.location.origin;
       const result = await triggerEBCLogin(studentId, serverHost);
       if (!result.success) {
-        setErrorAlert({show: true, message: result.error || 'Unknown error occurred'});
+        toast.error(result.error || 'មានបញ្ហាក្នុងការបញ្ជា Login');
         setStudents(prev => prev.map(s => s.id === studentId ? { ...s, status: 'FAILED' } : s));
       } else {
+        toast.success('បញ្ជា Login ជោគជ័យ!');
         setStudents(prev => prev.map(s => s.id === studentId ? { ...s, status: 'SUCCESS' } : s));
       }
     } catch (err: any) {
       console.error(err);
-      setErrorAlert({show: true, message: err.message || 'Error triggering login automation'});
+      toast.error(err.message || 'Error triggering login automation');
       setStudents(prev => prev.map(s => s.id === studentId ? { ...s, status: 'FAILED' } : s));
     } finally {
       setLoadingId(null);
@@ -678,8 +680,16 @@ export default function StudentTable({ initialStudents }: { initialStudents: Stu
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
-                  No accounts found matching your criteria.
+                <td colSpan={6} className="px-6 py-20 text-center">
+                  <div className="flex flex-col items-center justify-center">
+                    <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800/50 rounded-full flex items-center justify-center mb-4 shadow-inner">
+                      <SearchX size={32} className="text-slate-400 dark:text-slate-500" />
+                    </div>
+                    <h3 className="text-lg font-bold text-slate-700 dark:text-slate-300 mb-1">រកមិនឃើញទិន្នន័យទេ</h3>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                      មិនមានគណនីណាដែលត្រូវគ្នានឹងការស្វែងរករបស់អ្នកឡើយ។
+                    </p>
+                  </div>
                 </td>
               </tr>
             )}
