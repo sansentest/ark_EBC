@@ -126,7 +126,7 @@ export default function ImportPage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Class (Optional)</label>
+                <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">កំណត់ឈ្មោះថ្នាក់រួម (Optional)</label>
                 <input 
                   type="text" 
                   value={selectedClass}
@@ -134,7 +134,7 @@ export default function ImportPage() {
                   placeholder="e.g. 12A, 11B..."
                   className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700/50 rounded-xl px-4 py-2.5 text-sm text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
                 />
-                <p className="text-xs text-slate-500 mt-2">Applied to all rows if Excel doesn't specify class.</p>
+                <p className="text-xs text-slate-500 mt-2">ទុកចោល (ទទេ) បើ Excel របស់អ្នកបានបែងចែក Sheet តាមថ្នាក់រួចហើយ។ វានឹងយកឈ្មោះ Sheet ធ្វើជាឈ្មោះថ្នាក់ស្វ័យប្រវត្តិ។</p>
               </div>
             </div>
 
