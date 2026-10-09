@@ -68,7 +68,7 @@ export default function ImportPage() {
 
     // Map the excel columns to DTO
     const dtos: ImportStudentDTO[] = dataPreview.map((row, index) => ({
-      studentId: row['student_id'] || row['id'] || row['ល.រ.'] || row['លេខរៀង'] || `auto-${index}-${Date.now()}`,
+      studentId: row['student_id'] || row['id'] || `auto-${index}-${Date.now()}`,
       name: row['student_name'] || row['name'] || row['name_kh'] || row['ឈ្មោះជាភាសាខ្មែរ'] || '',
       className: row['class'] || row['class_name'] || selectedClass || 'N/A',
       role: selectedRole,
