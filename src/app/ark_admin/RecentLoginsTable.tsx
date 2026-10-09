@@ -131,7 +131,7 @@ export default function RecentLoginsTable({ recentStudents }: { recentStudents: 
                         >
                           {loadingId === student.id ? <Loader2 size={16} className="animate-spin" /> : <Play size={16} />}
                         </button>
-                        <Link href={`/admin/students`} className="p-1.5 text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+                        <Link href={`/ark_admin/students`} className="p-1.5 text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
                           <MoreVertical size={16} />
                         </Link>
                       </div>
@@ -149,7 +149,7 @@ export default function RecentLoginsTable({ recentStudents }: { recentStudents: 
           </table>
         </div>
         <div className="p-4 border-t border-slate-200 dark:border-slate-800/60 bg-slate-50 dark:bg-slate-900/20 text-center">
-          <Link href="/admin/students" className="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors">
+          <Link href="/ark_admin/students" className="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors">
             View All Students &rarr;
           </Link>
         </div>

@@ -17,5 +17,5 @@ export async function loginAction(username: string, password: string) {
 
 export async function logoutAction() {
   await deleteSession();
-  redirect('/login');
+  redirect('/ark_login');
 }

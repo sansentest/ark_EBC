@@ -15,9 +15,9 @@ export async function deleteStudentAction(id: number) {
       where: { id }
     });
     
-    revalidatePath('/admin/students');
-    revalidatePath('/admin/teachers');
-    revalidatePath('/admin');
+    revalidatePath('/ark_admin/students');
+    revalidatePath('/ark_admin/teachers');
+    revalidatePath('/ark_admin');
     
     return { success: true };
   } catch (error) {
@@ -37,9 +37,9 @@ export async function deleteBulkStudentsAction(ids: number[]) {
       where: { id: { in: ids } }
     });
     
-    revalidatePath('/admin/students');
-    revalidatePath('/admin/teachers');
-    revalidatePath('/admin');
+    revalidatePath('/ark_admin/students');
+    revalidatePath('/ark_admin/teachers');
+    revalidatePath('/ark_admin');
     
     return { success: true };
   } catch (error) {
@@ -59,9 +59,9 @@ export async function updateStudentAction(id: number, data: { name: string, clas
       }
     });
     
-    revalidatePath('/admin/students');
-    revalidatePath('/admin/teachers');
-    revalidatePath('/admin');
+    revalidatePath('/ark_admin/students');
+    revalidatePath('/ark_admin/teachers');
+    revalidatePath('/ark_admin');
     
     return { success: true };
   } catch (error) {

@@ -15,16 +15,16 @@ export default function SidebarNav() {
 
   const navItems = [
     { name: "Overview", type: "header" },
-    { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
+    { name: "Dashboard", href: "/ark_admin", icon: LayoutDashboard },
     
     { name: "Management", type: "header" },
-    { name: "Students", href: "/admin/students", icon: Users },
-    { name: "Teachers", href: "/admin/teachers", icon: Users },
-    { name: "Import Excel", href: "/admin/import", icon: FileUp },
-    { name: "Export Reports", href: "/admin/reports", icon: FileDown },
+    { name: "Students", href: "/ark_admin/students", icon: Users },
+    { name: "Teachers", href: "/ark_admin/teachers", icon: Users },
+    { name: "Import Excel", href: "/ark_admin/import", icon: FileUp },
+    { name: "Export Reports", href: "/ark_admin/reports", icon: FileDown },
     
     { name: "System", type: "header" },
-    { name: "Settings", href: "/admin/settings", icon: Settings },
+    { name: "Settings", href: "/ark_admin/settings", icon: Settings },
   ];
 
   return (

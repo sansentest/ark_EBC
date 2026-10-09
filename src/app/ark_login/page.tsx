@@ -22,7 +22,7 @@ export default function LoginPage() {
     const result = await loginAction(username, password);
     
     if (result.success) {
-      router.push('/admin');
+      router.push('/ark_admin');
     } else {
       setError(result.error || 'Invalid credentials');
       setLoading(false);

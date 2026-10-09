@@ -84,7 +84,7 @@ export async function triggerEBCLogin(studentId: number, serverHost: string = 'h
         
         // 4. Go to EBC E-Learning Login page
         try {
-          await page.goto('https://elearning-ar.ebc.edu.kh/login/index.php', { waitUntil: 'domcontentloaded', timeout: 30000 });
+          await page.goto('https://elearning-ar.ebc.edu.kh/ark_login/index.php', { waitUntil: 'domcontentloaded', timeout: 30000 });
         } catch (err: any) {
           throw new Error('វិបសាយ EBC ដើរយឺតខ្លាំង ឬមិនមានអ៊ីនធឺណិត (Connection Timed Out / EBC Down)');
         }

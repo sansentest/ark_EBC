@@ -87,9 +87,9 @@ export async function importStudentsAction(students: ImportStudentDTO[]) {
       importedCount = result.count;
     }
 
-    revalidatePath('/admin');
-    revalidatePath('/admin/students');
-    revalidatePath('/admin/teachers');
+    revalidatePath('/ark_admin');
+    revalidatePath('/ark_admin/students');
+    revalidatePath('/ark_admin/teachers');
     revalidatePath('/student');
     updateTag('students');
 

@@ -54,8 +54,8 @@ export async function deleteAllDataAction() {
     await prisma.student.deleteMany({});
 
     // Clear cache so frontend reflects empty DB
-    revalidatePath('/admin');
-    revalidatePath('/admin/students');
+    revalidatePath('/ark_admin');
+    revalidatePath('/ark_admin/students');
     revalidatePath('/student');
     updateTag('students');
 
