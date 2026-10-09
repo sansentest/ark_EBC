@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getDistinctClasses, getStudentsByClass, getStudentCredentials } from '@/app/actions/studentActions';
+import { getDistinctClasses, getStudentsByClass, getStudentCredentials, markStudentLoginSuccess } from '@/app/actions/studentActions';
 import { triggerEBCLogin } from '@/app/actions/automationActions';
 
 const copyToClipboard = async (text: string) => {
@@ -529,6 +529,7 @@ export default function StudentFlowPage() {
                 onClick={async () => {
                   await copyToClipboard(mobileCredentials.password);
                   window.open('https://sso.ebc.edu.kh', '_blank');
+                  await markStudentLoginSuccess(Number(selectedStudentId));
                   setIsLoggingIn(false);
                   setMobileCredentials(null);
                   setSelectedStudentId('');

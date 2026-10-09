@@ -126,3 +126,16 @@ export async function getStudentCredentials(studentId: number) {
     return { success: false, error: 'បរាជ័យក្នុងការទាញយកគណនី' };
   }
 }
+
+export async function markStudentLoginSuccess(studentId: number) {
+  try {
+    await prisma.student.update({
+      where: { id: studentId },
+      data: { status: 'SUCCESS' }
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Error marking login success:', error);
+    return { success: false };
+  }
+}
