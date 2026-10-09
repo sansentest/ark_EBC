@@ -84,6 +84,10 @@ export default function StudentTable({ initialStudents }: { initialStudents: Stu
   };
 
   const handleStartLogin = async (studentId: number) => {
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      toast.error('⚠️ មុខងារ Auto Login នេះដំណើរការបានតែនៅលើម៉ាស៊ីន Local (កុំព្យូទ័ររបស់អ្នក) ប៉ុណ្ណោះ!');
+      return;
+    }
     setLoadingId(studentId);
     setErrorAlert({show: false, message: ''});
     try {
@@ -133,6 +137,11 @@ export default function StudentTable({ initialStudents }: { initialStudents: Stu
   };
 
   const executeBulkLogin = async () => {
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      toast.error('⚠️ មុខងារ Auto Login នេះដំណើរការបានតែនៅលើម៉ាស៊ីន Local (កុំព្យូទ័ររបស់អ្នក) ប៉ុណ្ណោះ!');
+      setShowBulkModal(false);
+      return;
+    }
     if (studentsToRun.length === 0) return;
 
     setBulkLoading(true);
