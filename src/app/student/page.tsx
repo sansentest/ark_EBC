@@ -529,7 +529,19 @@ export default function StudentFlowPage() {
               <button
                 onClick={async () => {
                   await copyToClipboard(mobileCredentials.username);
-                  window.open('https://sso.ebc.edu.kh/oauth2/authorize?client_id=C16MlpSMMRw9zw9XiKCGce7DSpga&redirect_uri=https%3A%2F%2Felearning-ar.ebc.edu.kh%2Fadmin%2Foauth2callback.php&response_type=code&scope=openid+email+profile&prompt=login&forceAuth=true', '_blank');
+                  try {
+                    // Fetch a fresh SSO URL with valid sesskey from our server
+                    const res = await fetch('/api/get-sso-url');
+                    const data = await res.json();
+                    if (data.url) {
+                      window.open(data.url, '_blank');
+                    } else {
+                      // Fallback to standard Moodle login
+                      window.open('https://elearning-ar.ebc.edu.kh/login/index.php', '_blank');
+                    }
+                  } catch {
+                    window.open('https://elearning-ar.ebc.edu.kh/login/index.php', '_blank');
+                  }
                   await markStudentLoginSuccess(Number(selectedStudentId));
                 }}
                 className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-[1rem] font-bold text-[16px] transition-all duration-300 shadow-lg shadow-blue-500/25 flex items-center justify-center gap-3 active:scale-[0.98] mb-6"
