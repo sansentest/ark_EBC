@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/prisma';
 import { encrypt } from '@/lib/crypto';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 
 export interface ImportStudentDTO {
   studentId: string;
@@ -91,7 +91,7 @@ export async function importStudentsAction(students: ImportStudentDTO[]) {
     revalidatePath('/admin/students');
     revalidatePath('/admin/teachers');
     revalidatePath('/student');
-    revalidateTag('students');
+    updateTag('students');
 
     if (skipped.length > 0) {
       console.log('--- SKIPPED STUDENTS REPORT ---');
