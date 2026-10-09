@@ -526,23 +526,29 @@ export default function StudentFlowPage() {
               {/* Warning Banner */}
 
               {/* Step Guide */}
-              <div className="bg-blue-50 border border-blue-100 rounded-[1rem] p-4 mb-5">
-                <p className="text-[12px] font-bold text-blue-700 mb-2 flex items-center gap-1.5">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                  ជំហានបន្ទាប់
+              <div className="bg-blue-50/80 border border-blue-100 rounded-[1rem] p-4 mb-5">
+                <p className="text-[13px] font-bold text-blue-800 mb-3 flex items-center gap-1.5">
+                  <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  តើត្រូវធ្វើអ្វីបន្តទៀត?
                 </p>
-                <ol className="space-y-1.5 list-none">
-                  <li className="text-[12px] text-blue-600/90 font-semibold flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[10px] font-black flex items-center justify-center shrink-0">1</span>
-                    ចុចប៊ូតុងខាងក្រោម (Username ចម្លងស្វ័យប្រវត្ត)
+                <ol className="space-y-3 list-none">
+                  <li className="text-[12.5px] text-blue-900 font-medium flex items-start gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5 shadow-sm shadow-blue-200">1</span>
+                    <span>ចុចប៊ូតុងខាងក្រោម (Username នឹងត្រូវចម្លងទុកស្វ័យប្រវត្ត)</span>
                   </li>
-                  <li className="text-[12px] text-blue-600/90 font-semibold flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[10px] font-black flex items-center justify-center shrink-0">2</span>
-                    ចុចប៊ូតុង <span className="bg-blue-600 text-white px-1.5 py-0.5 rounded text-[10px]">EBC</span> នៅលើ Moodle
+                  <li className="text-[12.5px] text-blue-900 font-medium flex items-start gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5 shadow-sm shadow-blue-200">2</span>
+                    <div className="flex flex-col gap-1.5">
+                      <span>ពេលទៅដល់ Moodle សូមចុចប៊ូតុង EBC ដែលមានរាងបែបនេះ ៖</span>
+                      <div className="inline-flex items-center gap-2 bg-[#0f6cbf] text-white px-3 py-1.5 rounded text-[12px] font-bold shadow-sm self-start mt-1 cursor-default">
+                        <img src="https://elearning-ar.ebc.edu.kh/pluginfile.php/1/core_admin/logo/0x200/1715655755/New%20EBC%20Logo.png" className="w-4 h-4 bg-white rounded-full p-[1px]" alt="EBC" />
+                        EBC
+                      </div>
+                    </div>
                   </li>
-                  <li className="text-[12px] text-blue-600/90 font-semibold flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[10px] font-black flex items-center justify-center shrink-0">3</span>
-                    Paste Username + វាយ Password → ចូលបានភ្លាម!
+                  <li className="text-[12.5px] text-blue-900 font-medium flex items-start gap-2.5">
+                    <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5 shadow-sm shadow-blue-200">3</span>
+                    <span>Paste Username + វាយ Password ចូលជាការស្រេច!</span>
                   </li>
                 </ol>
               </div>
@@ -551,7 +557,8 @@ export default function StudentFlowPage() {
               <button
                 onClick={async () => {
                   await copyToClipboard(mobileCredentials.username);
-                  window.open('https://elearning-ar.ebc.edu.kh/login/index.php', '_blank');
+                  // Deep-link to Moodle Dashboard (/my/) instead of standard login
+                  window.open('https://elearning-ar.ebc.edu.kh/my/', '_blank');
                   await markStudentLoginSuccess(Number(selectedStudentId));
                 }}
                 className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-[1rem] font-bold text-[16px] transition-all duration-300 shadow-lg shadow-blue-500/25 flex items-center justify-center gap-3 active:scale-[0.98] mb-6"
