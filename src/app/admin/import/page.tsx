@@ -55,6 +55,14 @@ export default function ImportPage() {
   const processImport = async () => {
     if (dataPreview.length === 0) return;
     
+    if (selectedRole === 'STUDENT') {
+      const hasClassColumn = dataPreview.some(row => row['class'] || row['class_name']);
+      if (!selectedClass && !hasClassColumn) {
+        toast.error('⚠️ សូមបញ្ចូលឈ្មោះថ្នាក់រៀនជាមុនសិន!');
+        return;
+      }
+    }
+    
     setIsImporting(true);
     setResult(null);
 
