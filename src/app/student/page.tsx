@@ -527,7 +527,7 @@ export default function StudentFlowPage() {
               {/* Main Button */}
               <button
                 onClick={async () => {
-                  await copyToClipboard(mobileCredentials.password);
+                  await copyToClipboard(mobileCredentials.username);
                   window.open('https://sso.ebc.edu.kh', '_blank');
                   await markStudentLoginSuccess(Number(selectedStudentId));
                   setIsLoggingIn(false);
