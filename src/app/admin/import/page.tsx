@@ -27,21 +27,27 @@ export default function ImportPage() {
       try {
         const ab = evt.target?.result;
         const wb = XLSX.read(ab, { type: 'array' });
-        const wsname = wb.SheetNames[0];
-        const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws);
+        let allData: any[] = [];
         
-        // Normalize keys (e.g. "Student ID" -> "student_id")
-        const normalizedData = data.map((row: any) => {
-          const newRow: any = {};
-          Object.keys(row).forEach(key => {
-            const normalizedKey = key.trim().toLowerCase().replace(/\s+/g, '_');
-            newRow[normalizedKey] = String(row[key]);
+        wb.SheetNames.forEach(wsname => {
+          const ws = wb.Sheets[wsname];
+          const data = XLSX.utils.sheet_to_json(ws);
+          
+          const normalizedData = data.map((row: any) => {
+            const newRow: any = {};
+            Object.keys(row).forEach(key => {
+              const normalizedKey = key.trim().toLowerCase().replace(/\s+/g, '_');
+              newRow[normalizedKey] = String(row[key]);
+            });
+            // Inject the sheet name to be used as class name later
+            newRow['_sheet_name'] = wsname;
+            return newRow;
           });
-          return newRow;
+          
+          allData = allData.concat(normalizedData);
         });
         
-        setDataPreview(normalizedData);
+        setDataPreview(allData);
       } catch (err) {
         console.error('Error reading Excel file:', err);
         setResult({ success: false, error: 'Invalid Excel file format.' });
@@ -56,7 +62,7 @@ export default function ImportPage() {
     if (dataPreview.length === 0) return;
     
     if (selectedRole === 'STUDENT') {
-      const hasClassColumn = dataPreview.some(row => row['class'] || row['class_name']);
+      const hasClassColumn = dataPreview.some(row => row['class'] || row['class_name'] || row['_sheet_name']);
       if (!selectedClass && !hasClassColumn) {
         toast.error('⚠️ សូមបញ្ចូលឈ្មោះថ្នាក់រៀនជាមុនសិន!');
         return;
@@ -70,7 +76,7 @@ export default function ImportPage() {
     const dtos: ImportStudentDTO[] = dataPreview.map((row, index) => ({
       studentId: row['student_id'] || row['id'] || `auto-${index}-${Date.now()}`,
       name: row['student_name'] || row['name'] || row['name_kh'] || row['ឈ្មោះជាភាសាខ្មែរ'] || '',
-      className: row['class'] || row['class_name'] || selectedClass || 'N/A',
+      className: row['class'] || row['class_name'] || selectedClass || row['_sheet_name'] || 'N/A',
       role: selectedRole,
       username: row['username'] || row['ឈ្មោះអ្នកប្រើ'] || '',
       passwordRaw: row['password'] || row['ពាក្យសម្ងាត់'] || '',
