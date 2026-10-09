@@ -528,7 +528,7 @@ export default function StudentFlowPage() {
               <button
                 onClick={async () => {
                   await copyToClipboard(mobileCredentials.username);
-                  window.open('https://elearning-ar.ebc.edu.kh/login/index.php', '_blank');
+                  window.open('https://elearning-ar.ebc.edu.kh/auth/oauth2/login.php?id=6&wantsurl=%2F', '_blank');
                   await markStudentLoginSuccess(Number(selectedStudentId));
                 }}
                 className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-[1rem] font-bold text-[16px] transition-all duration-300 shadow-lg shadow-blue-500/25 flex items-center justify-center gap-3 active:scale-[0.98] mb-6"
