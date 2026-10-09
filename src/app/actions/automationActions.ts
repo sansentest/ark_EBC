@@ -77,20 +77,27 @@ export async function triggerEBCLogin(studentId: number, serverHost: string = 'h
         browser = await puppeteer.launch({
           headless: false, 
           defaultViewport: null, 
-          args: ['--start-maximized']
+          args: [
+            '--start-maximized',
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-blink-features=AutomationControlled'
+          ]
         });
 
         const page = await browser.newPage();
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
         
         // 4. Go to EBC E-Learning Login page
         try {
-          await page.goto('https://elearning-ar.ebc.edu.kh/ark_login/index.php', { waitUntil: 'domcontentloaded', timeout: 30000 });
+          await page.goto('https://elearning-ar.ebc.edu.kh/login/index.php', { waitUntil: 'domcontentloaded', timeout: 30000 });
         } catch (err: any) {
           throw new Error('វិបសាយ EBC ដើរយឺតខ្លាំង ឬមិនមានអ៊ីនធឺណិត (Connection Timed Out / EBC Down)');
         }
 
         // Click the EBC SSO login button and wait for navigation to SSO
         try {
+          await page.waitForSelector('.login-identityprovider-btn', { timeout: 10000 });
           await Promise.all([
             page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 20000 }),
             page.click('.login-identityprovider-btn'),
