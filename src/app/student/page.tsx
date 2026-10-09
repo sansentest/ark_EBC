@@ -41,7 +41,7 @@ export default function StudentFlowPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [classSearchQuery, setClassSearchQuery] = useState('');
   const [isClassDropdownOpen, setIsClassDropdownOpen] = useState(false);
-  
+
   const [loadingClasses, setLoadingClasses] = useState(true);
   const [loadingStudents, setLoadingStudents] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -49,7 +49,7 @@ export default function StudentFlowPage() {
   const [error, setError] = useState<string | null>(null);
 
   const [isMobile, setIsMobile] = useState(false);
-  const [mobileCredentials, setMobileCredentials] = useState<{username: string, password: string} | null>(null);
+  const [mobileCredentials, setMobileCredentials] = useState<{ username: string, password: string } | null>(null);
   const [copiedUsername, setCopiedUsername] = useState(false);
   const [isReturningUser, setIsReturningUser] = useState(false);
 
@@ -105,12 +105,12 @@ export default function StudentFlowPage() {
   const handleLogin = async (overrideId?: string) => {
     const idToUse = typeof overrideId === 'string' ? overrideId : selectedStudentId;
     if (!idToUse) return;
-    
+
     setIsLoggingIn(true);
     setIsSuccess(false);
     setError(null);
     setMobileCredentials(null);
-    
+
     try {
       // Universal: Always show Copy & Paste overlay for all devices (mobile + desktop)
       const res = await getStudentCredentials(Number(idToUse));
@@ -126,18 +126,18 @@ export default function StudentFlowPage() {
     }
   };
 
-  const filteredStudents = students.filter(s => 
-    s.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+  const filteredStudents = students.filter(s =>
+    s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     (s.student_id && s.student_id.toString().toLowerCase().includes(searchQuery.toLowerCase()))
   );
-  const filteredClasses = classes.filter(cls => 
+  const filteredClasses = classes.filter(cls =>
     cls.toLowerCase().includes(classSearchQuery.toLowerCase())
   );
 
 
   return (
     <div className="min-h-[100dvh] relative flex flex-col justify-center py-4 sm:py-8 sm:px-6 lg:px-8 bg-[#f4f7f9] font-kantumruy overflow-x-hidden selection:bg-blue-200 selection:text-blue-900">
-      
+
       {/* Premium Background Mesh Gradient */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none flex justify-center items-center">
         <div className="absolute w-[600px] h-[600px] rounded-full bg-blue-400/20 blur-[120px] -translate-x-1/3 -translate-y-1/4"></div>
@@ -146,12 +146,12 @@ export default function StudentFlowPage() {
       </div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-[440px] relative z-10 px-4 sm:px-0">
-        
+
         {/* Header / Logo */}
         <div className="text-center mb-4 sm:mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="inline-flex items-center justify-center w-[60px] h-[60px] sm:w-[72px] sm:h-[72px] rounded-[20px] sm:rounded-[24px] bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-white mb-3 sm:mb-4 relative group cursor-default transform transition-transform hover:scale-105 duration-500">
-             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 rounded-[20px] sm:rounded-[24px]"></div>
-             <svg className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600 drop-shadow-sm relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 rounded-[20px] sm:rounded-[24px]"></div>
+            <svg className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600 drop-shadow-sm relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0v6"></path>
@@ -167,7 +167,7 @@ export default function StudentFlowPage() {
 
         {/* Main Card */}
         <div className="relative bg-white/70 backdrop-blur-2xl px-5 py-3 sm:px-8 sm:py-4 shadow-[0_8px_40px_rgb(0,0,0,0.04)] border border-white rounded-[2rem] sm:rounded-[2.5rem] animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150 fill-mode-both">
-          
+
           {/* Subtle top glare */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[50%] h-[1px] bg-gradient-to-r from-transparent via-white to-transparent opacity-80"></div>
 
@@ -223,7 +223,7 @@ export default function StudentFlowPage() {
                   <label className="block text-[12px] sm:text-[13px] font-bold text-slate-700 uppercase tracking-wider mb-2 ml-1">
                     ថ្នាក់រៀនរបស់អ្នក
                   </label>
-                  
+
                   {/* Dropdown Button */}
                   <button
                     type="button"
@@ -231,9 +231,8 @@ export default function StudentFlowPage() {
                       if (!isLoggingIn) setIsClassDropdownOpen(!isClassDropdownOpen);
                     }}
                     disabled={loadingClasses || isLoggingIn}
-                    className={`w-full flex items-center justify-between px-5 py-3.5 bg-white border text-left rounded-[1.25rem] shadow-sm transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${
-                      isClassDropdownOpen ? 'border-blue-500 shadow-md shadow-blue-500/10' : 'border-slate-200 hover:border-blue-300'
-                    } disabled:opacity-50`}
+                    className={`w-full flex items-center justify-between px-5 py-3.5 bg-white border text-left rounded-[1.25rem] shadow-sm transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-500/10 ${isClassDropdownOpen ? 'border-blue-500 shadow-md shadow-blue-500/10' : 'border-slate-200 hover:border-blue-300'
+                      } disabled:opacity-50`}
                   >
                     {loadingClasses ? (
                       <span className="text-[14px] sm:text-[15px] font-medium text-slate-500 flex items-center gap-2">
@@ -245,9 +244,9 @@ export default function StudentFlowPage() {
                     ) : (
                       <span className="text-[14px] sm:text-[15px] font-medium text-slate-400">-- សូមជ្រើសរើសថ្នាក់រៀន --</span>
                     )}
-                    
-                    <svg 
-                      className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isClassDropdownOpen ? 'rotate-180' : ''}`} 
+
+                    <svg
+                      className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isClassDropdownOpen ? 'rotate-180' : ''}`}
                       fill="none" viewBox="0 0 24 24" stroke="currentColor"
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
@@ -255,13 +254,12 @@ export default function StudentFlowPage() {
                   </button>
 
                   {/* Dropdown Menu */}
-                  <div className={`transition-all duration-300 ease-in-out origin-top absolute top-full left-0 right-0 mt-2 ${
-                    isClassDropdownOpen 
-                      ? 'opacity-100 scale-100 translate-y-0 visible' 
-                      : 'opacity-0 scale-95 -translate-y-2 invisible'
-                  }`}>
+                  <div className={`transition-all duration-300 ease-in-out origin-top absolute top-full left-0 right-0 mt-2 ${isClassDropdownOpen
+                    ? 'opacity-100 scale-100 translate-y-0 visible'
+                    : 'opacity-0 scale-95 -translate-y-2 invisible'
+                    }`}>
                     <div className="bg-white border border-slate-200 rounded-[1.25rem] shadow-xl shadow-slate-200/50 p-3">
-                      
+
                       {/* Search Input inside Dropdown */}
                       <div className="relative mb-3">
                         <input
@@ -293,11 +291,10 @@ export default function StudentFlowPage() {
                                 localStorage.setItem('ebc_saved_class', cls);
                                 localStorage.removeItem('ebc_saved_student_id');
                               }}
-                              className={`flex items-center justify-center py-2.5 px-2 rounded-xl border text-[14px] font-bold transition-all duration-200 ${
-                                selectedClass === cls
-                                  ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20'
-                                  : 'bg-white text-slate-700 border-slate-100 hover:border-blue-300 hover:bg-blue-50'
-                              }`}
+                              className={`flex items-center justify-center py-2.5 px-2 rounded-xl border text-[14px] font-bold transition-all duration-200 ${selectedClass === cls
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20'
+                                : 'bg-white text-slate-700 border-slate-100 hover:border-blue-300 hover:bg-blue-50'
+                                }`}
                             >
                               {cls}
                             </button>
@@ -317,7 +314,7 @@ export default function StudentFlowPage() {
                   <label className="block text-[12px] sm:text-[13px] font-bold text-slate-700 uppercase tracking-wider mb-2 ml-1">
                     ឈ្មោះសិស្ស
                   </label>
-                  
+
                   <div className="relative mb-3">
                     <input
                       type="text"
@@ -363,7 +360,7 @@ export default function StudentFlowPage() {
                               <span className="text-[11px] text-slate-400 font-medium font-mono uppercase tracking-wider group-hover:text-blue-400">ID: {student.student_id}</span>
                             </span>
                             <div className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity -mr-1">
-                               <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7"/></svg>
+                              <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
                             </div>
                           </button>
                         ))
@@ -380,25 +377,25 @@ export default function StudentFlowPage() {
               // WELCOME BACK FAST PATH
               <div className="bg-white/50 backdrop-blur-sm border border-blue-100/60 rounded-[2rem] p-6 sm:p-8 text-center shadow-[0_8px_30px_rgb(0,0,0,0.02)] animate-in zoom-in-95 duration-500 relative overflow-hidden group">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-indigo-500 opacity-80"></div>
-                
+
                 <div className="relative z-10">
                   <div className="w-[72px] h-[72px] bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-[24px] flex items-center justify-center mx-auto mb-5 shadow-xl shadow-blue-500/20 transform transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 border-2 border-white">
                     <span className="text-4xl font-black">
-                      {students.length > 0 
+                      {students.length > 0
                         ? students.find(s => s.id.toString() === selectedStudentId)?.name?.charAt(0) || '👤'
                         : '...'}
                     </span>
                   </div>
                   <h3 className="text-[20px] sm:text-[24px] font-black text-slate-800 mb-2 tracking-tight">
                     សួស្ដី, <span className="text-blue-600">
-                      {students.length > 0 
+                      {students.length > 0
                         ? students.find(s => s.id.toString() === selectedStudentId)?.name || 'សិស្ស'
                         : 'កំពុងរៀបចំ...'}
                     </span>! 👋
                   </h3>
                   <p className="text-[14px] font-medium text-slate-500 mb-6">រួចរាល់ក្នុងការចូលរៀនហើយឬនៅ?</p>
-                  
-                  <button 
+
+                  <button
                     type="button"
                     disabled={isLoggingIn}
                     onClick={() => {
@@ -433,7 +430,7 @@ export default function StudentFlowPage() {
             </div>
           </div>
         </div>
-        
+
         <p className="mt-10 text-center text-[12px] text-slate-400/80 font-semibold tracking-wider uppercase animate-in fade-in duration-1000 delay-500">
           ប្រព័ន្ធគ្រប់គ្រងសិស្ស EBC &copy; 2026
         </p>
@@ -443,7 +440,7 @@ export default function StudentFlowPage() {
       {mobileCredentials && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/10 backdrop-blur-md animate-in fade-in duration-300">
           <div className="w-full max-w-[380px] mx-auto bg-white/95 backdrop-blur-2xl rounded-[2rem] sm:rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] border border-white overflow-hidden animate-in zoom-in-95 fade-in duration-300 flex flex-col max-h-[90vh]">
-            
+
             {/* Header */}
             <div className="pt-8 pb-4 px-8 text-center shrink-0 flex flex-col items-center">
               <div className="w-[60px] h-[60px] bg-gradient-to-br from-blue-500 to-indigo-600 rounded-[20px] mx-auto flex items-center justify-center mb-4 shadow-lg shadow-blue-500/30">
@@ -453,7 +450,7 @@ export default function StudentFlowPage() {
               </div>
               <h3 className="text-[20px] font-black text-slate-800 tracking-tight mb-1">គណនីរបស់អ្នក</h3>
               <p className="text-slate-500 text-[13px] font-medium mb-4">សូមចម្លងUSERNAMEនិងPASSWORDទៅប្រអប់ខាងក្រោម</p>
-              
+
               <div className="flex items-center gap-1.5 mb-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
                 <div className="w-5 h-1.5 rounded-full bg-blue-500"></div>
@@ -462,14 +459,14 @@ export default function StudentFlowPage() {
             </div>
 
             <div className="px-6 sm:px-8 pb-6 sm:pb-8 overflow-y-auto custom-scrollbar">
-              
+
               {/* Username Section */}
               <div className="mb-4">
                 <div className="flex items-center gap-2 mb-2 ml-1">
                   <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                   <span className="text-[12px] font-bold text-slate-500 uppercase tracking-wider">ឈ្មោះអ្នកប្រើ (USERNAME)</span>
                 </div>
-                
+
                 <div className="flex items-center p-2.5 sm:p-3 border border-slate-200 rounded-[1rem] bg-white shadow-sm">
                   <div className="w-10 h-10 flex items-center justify-center shrink-0">
                     <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
@@ -507,7 +504,7 @@ export default function StudentFlowPage() {
                   <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
                   <span className="text-[12px] font-bold text-slate-500 uppercase tracking-wider">ពាក្យសម្ងាត់ (PASSWORD)</span>
                 </div>
-                
+
                 <div className="flex items-center p-2.5 sm:p-3 border border-slate-200 rounded-[1rem] bg-white shadow-sm">
                   <div className="w-10 h-10 flex items-center justify-center shrink-0">
                     <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
@@ -526,24 +523,20 @@ export default function StudentFlowPage() {
               {/* Warning Banner */}
 
               {/* Step Guide */}
-              <div className="bg-blue-50/80 border border-blue-100 rounded-[1rem] p-4 mb-5">
+              <div className="bg-blue-50/80 border border-blue-100 rounded-[1rem] p-3 mb-4">
                 <p className="text-[13px] font-bold text-blue-800 mb-3 flex items-center gap-1.5">
-                  <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                   តើត្រូវធ្វើអ្វីបន្តទៀត?
                 </p>
                 <ol className="space-y-3 list-none">
                   <li className="text-[12.5px] text-blue-900 font-medium flex items-start gap-2.5">
                     <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5 shadow-sm shadow-blue-200">1</span>
-                    <span>ចុចប៊ូតុងខាងក្រោម (Username នឹងត្រូវចម្លងទុកស្វ័យប្រវត្ត)</span>
+                    <span>ចម្លង Username</span>
                   </li>
                   <li className="text-[12.5px] text-blue-900 font-medium flex items-start gap-2.5">
                     <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5 shadow-sm shadow-blue-200">2</span>
                     <div className="flex flex-col gap-1.5">
-                      <span>ពេលទៅដល់ Moodle សូមចុចប៊ូតុង EBC ដែលមានរាងបែបនេះ ៖</span>
-                      <div className="inline-flex items-center gap-2 bg-[#0f6cbf] text-white px-3 py-1.5 rounded text-[12px] font-bold shadow-sm self-start mt-1 cursor-default">
-                        <img src="https://elearning-ar.ebc.edu.kh/pluginfile.php/1/core_admin/logo/0x200/1715655755/New%20EBC%20Logo.png" className="w-4 h-4 bg-white rounded-full p-[1px]" alt="EBC" />
-                        EBC
-                      </div>
+                      <span>ចូលទៅកាន់ Moodle ហើយចុចប៊ូតុង EBC</span>
                     </div>
                   </li>
                   <li className="text-[12.5px] text-blue-900 font-medium flex items-start gap-2.5">
@@ -589,9 +582,9 @@ export default function StudentFlowPage() {
                 </svg>
                 <span>ត្រលប់ក្រោយដើម្បីប្ដូរឈ្មោះ</span>
               </button>
-              </div>
             </div>
           </div>
+        </div>
       )}
     </div>
   );
