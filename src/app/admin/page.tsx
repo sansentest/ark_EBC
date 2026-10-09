@@ -15,11 +15,24 @@ import DashboardChart from './DashboardChart';
 export const instant = false;
 
 export default async function AdminDashboard() {
-  // Fetch real statistics from Prisma
-  const totalStudents = await prisma.student.count();
-  const successCount = await prisma.student.count({ where: { status: 'SUCCESS' } });
-  const failedCount = await prisma.student.count({ where: { status: 'FAILED' } });
-  const notStartedCount = await prisma.student.count({ where: { status: 'NOT STARTED' } });
+  // Fetch all data concurrently in a single round-trip
+  const [
+    totalStudents,
+    successCount,
+    failedCount,
+    notStartedCount,
+    recentStudents,
+    studentsByClass,
+    studentsWithStatus
+  ] = await Promise.all([
+    prisma.student.count(),
+    prisma.student.count({ where: { status: 'SUCCESS' } }),
+    prisma.student.count({ where: { status: 'FAILED' } }),
+    prisma.student.count({ where: { status: 'NOT STARTED' } }),
+    prisma.student.findMany({ take: 5, orderBy: { updated_at: 'desc' } }),
+    prisma.student.groupBy({ by: ['class_name'], _count: { _all: true } }),
+    prisma.student.findMany({ select: { class_name: true, status: true } })
+  ]);
 
   const stats = [
     { label: "Total Accounts", value: totalStudents.toString(), icon: Users, color: "from-blue-500 to-cyan-500", bg: "bg-blue-500/10", border: "border-blue-500/20" },
@@ -28,25 +41,7 @@ export default async function AdminDashboard() {
     { label: "Not Started", value: notStartedCount.toString(), icon: UserMinus, color: "from-slate-400 to-slate-500", bg: "bg-slate-500/10", border: "border-slate-500/20" },
   ];
 
-  // Fetch recent students
-  const recentStudents = await prisma.student.findMany({
-    take: 5,
-    orderBy: { updated_at: 'desc' },
-  });
-
-  // Calculate chart data (Group students by class and status)
-  const studentsByClass = await prisma.student.groupBy({
-    by: ['class_name'],
-    _count: {
-      _all: true,
-    },
-  });
-
   const classNames = studentsByClass.map(c => c.class_name).filter(Boolean);
-  const studentsWithStatus = await prisma.student.findMany({
-    where: { class_name: { in: classNames } },
-    select: { class_name: true, status: true }
-  });
 
   const chartData = classNames.map(cls => {
     const classStudents = studentsWithStatus.filter(s => s.class_name === cls);

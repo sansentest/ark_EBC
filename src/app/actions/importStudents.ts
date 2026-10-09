@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/prisma';
 import { encrypt } from '@/lib/crypto';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 export interface ImportStudentDTO {
   studentId: string;
@@ -91,6 +91,18 @@ export async function importStudentsAction(students: ImportStudentDTO[]) {
     revalidatePath('/admin/students');
     revalidatePath('/admin/teachers');
     revalidatePath('/student');
+    revalidateTag('students');
+
+    if (skipped.length > 0) {
+      console.log('--- SKIPPED STUDENTS REPORT ---');
+      const missingFields = skipped.filter(s => s.reason === 'Missing required fields').length;
+      const duplicates = skipped.filter(s => s.reason === 'Duplicate Student ID or Username').length;
+      console.log(`Total Skipped: ${skipped.length}`);
+      console.log(`- Missing Username/Password: ${missingFields}`);
+      console.log(`- Duplicates: ${duplicates}`);
+      console.log('First 5 skipped details:', skipped.slice(0, 5));
+      console.log('-------------------------------');
+    }
 
     return { 
       success: true, 

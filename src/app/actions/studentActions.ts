@@ -70,31 +70,46 @@ export async function updateStudentAction(id: number, data: { name: string, clas
   }
 }
 
-import { unstable_noStore as noStore } from 'next/cache';
+import { unstable_cache, revalidateTag } from 'next/cache';
 
-export async function getDistinctClasses() {
-  noStore();
-  try {
+const getCachedClasses = unstable_cache(
+  async () => {
     const students = await prisma.student.findMany({
       select: { class_name: true },
       distinct: ['class_name'],
       orderBy: { class_name: 'asc' }
     });
-    return { success: true, classes: students.map(s => s.class_name) };
+    return students.map(s => s.class_name);
+  },
+  ['distinct-classes'],
+  { tags: ['students'], revalidate: 3600 }
+);
+
+export async function getDistinctClasses() {
+  try {
+    const classes = await getCachedClasses();
+    return { success: true, classes };
   } catch (error) {
     console.error('Error fetching classes:', error);
     return { success: false, error: 'Failed to fetch classes' };
   }
 }
 
-export async function getStudentsByClass(className: string) {
-  noStore();
-  try {
-    const students = await prisma.student.findMany({
+const getCachedStudents = unstable_cache(
+  async (className: string) => {
+    return await prisma.student.findMany({
       where: { class_name: className },
       select: { id: true, name: true, student_id: true, status: true },
       orderBy: { name: 'asc' }
     });
+  },
+  ['students-by-class'],
+  { tags: ['students'], revalidate: 3600 }
+);
+
+export async function getStudentsByClass(className: string) {
+  try {
+    const students = await getCachedStudents(className);
     return { success: true, students };
   } catch (error) {
     console.error('Error fetching students:', error);
